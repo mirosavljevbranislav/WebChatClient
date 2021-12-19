@@ -1,18 +1,14 @@
-import socket
-from view import home
+import asyncio
+import websockets
 
 HOST = 'localhost'
 PORT = 8000
 
 
-class Client:
-
-    def __init__(self, host, port):
-        print("Client connected!")
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect((host, port))
-
-        home.create_home_page()
+async def hello():
+    async with websockets.connect("ws://localhost:8000/ws") as websocket:
+        await websocket.send("Hello world!")
+        await websocket.recv()
 
 
-client = Client(HOST, PORT)
+asyncio.run(hello())

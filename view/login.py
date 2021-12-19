@@ -4,7 +4,9 @@ from tkinter import *
 
 import requests
 
-from view import home
+
+from view import home_page
+from view.global_chat import GlobalPage
 
 
 class LoginWindow(tkinter.Tk):
@@ -26,7 +28,7 @@ class LoginWindow(tkinter.Tk):
 
         Button(self, text="Login", command=self.send_login_info).pack()
 
-        home.destroy_home_window()
+        home_page.destroy_home_window()
         self.mainloop()
 
     def send_login_info(self):
@@ -35,4 +37,19 @@ class LoginWindow(tkinter.Tk):
 
         data = {"username": username, "password": password}
 
-        requests.post("http://127.0.0.1:8000/login", data=json.dumps(data))
+        request = requests.post("http://127.0.0.1:8000/login", data=json.dumps(data))
+        if request:
+            self.destroy()
+            global_page = GlobalPage()
+            global_page.update()
+            global_page.update_idletasks()
+        else:
+            self.wrong_info_popup()
+
+    def wrong_info_popup(self):
+        popup = Toplevel(self)
+        popup.geometry("400x70")
+        popup.title("Wrong info")
+        Label(popup, text="Incorrect username or password", font='Mistral 12 bold').pack()
+        Button(popup, text="Okay", command=popup.destroy).pack()
+        self.mainloop()

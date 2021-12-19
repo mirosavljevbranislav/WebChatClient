@@ -6,6 +6,7 @@ tkWindow = Tk()
 
 
 def open_register_window():
+
     rw = RegisterWindow()
     rw.update()
     rw.update_idletasks()
